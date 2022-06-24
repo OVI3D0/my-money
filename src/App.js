@@ -9,6 +9,8 @@ import Signup from './pages/signup/Signup';
 function App() {
   return (
     <div className="App">
+      {/* navbar will appear in every page, so
+      we put it outside of the routes  */}
       <Navbar />
       <Routes>
         <Route path="/home" element={<Home />} />

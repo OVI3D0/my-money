@@ -12,6 +12,7 @@ export default function Login() {
     }
 
     return (
+        // We add the class name this way because of the hyphen
         <form onSubmit={handleSubmit} className={styles['login-form']}>
             <h2>Login</h2>
             <label>

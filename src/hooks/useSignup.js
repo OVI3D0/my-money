@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { projectAuth } from '../firebase/config'
+import { useAuthContext } from './useAuthContext'
 
 export const useSignup = () => {
-
+    const [isCancelled, setIsCancelled] = useState(false)
     const [error, setError] = useState(null);
-    const [isPending, setIsPending] = useState(false)
+    const [isPending, setIsPending] = useState(false);
+    const { dispatch } = useAuthContext();
 
     const signup = async (email, password, displayName) => {
         // incase the function was previously called & returned an error
@@ -15,7 +17,6 @@ export const useSignup = () => {
         try{
             // try to signup user
             const res = await projectAuth.createUserWithEmailAndPassword(email, password)
-            console.log(res.user)
 
             // incase the response fails for whatever reason
             if(!res) {
@@ -25,15 +26,26 @@ export const useSignup = () => {
             // add display name to user
             await res.user.updateProfile({ displayName: displayName})
 
-            setIsPending(false)
-            setError(null)
+            // dispatch login action
+            dispatch({ type: 'LOGIN', payload: res.user })
+
+            if (!isCancelled) {
+                setIsPending(false)
+                setError(null)
+            }
         }
         catch(err) {
-            console.log(err.message)
-            setError(err.message)
-            setIsPending(false)
+            if(!isCancelled) {
+                console.log(err.message)
+                setError(err.message)
+                setIsPending(false)
+            }
         }
     }
+
+    useEffect(() => {
+        return () => setIsCancelled(true)
+    }, [])
 
     return { error, isPending, signup }
 }

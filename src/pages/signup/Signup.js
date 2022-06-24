@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import styles from './Signup.module.css'
 import { useSignup } from '../../hooks/useSignup'
+
+// styles
+import styles from './Signup.module.css'
 
 
 export default function Signup() {
