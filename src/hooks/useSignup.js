@@ -42,7 +42,7 @@ export const useSignup = () => {
             }
         }
     }
-
+    // check useLogout for the explanation of this cleanup function
     useEffect(() => {
         return () => setIsCancelled(true)
     }, [])
